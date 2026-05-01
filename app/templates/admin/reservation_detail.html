@@ -1,0 +1,91 @@
+{% extends 'admin/base.html' %}
+{% block title %}Réservation #{{ resa.id }}{% endblock %}
+{% block page_title %}Réservation #{{ resa.id }}{% endblock %}
+{% block page_sub %}{{ resa.full_name }} — {{ resa.type_prest }}{% endblock %}
+
+{% block header_actions %}
+  <a href="{{ url_for('admin.reservations') }}" class="text-sm text-gray-400 hover:text-white transition">← Retour</a>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-3 gap-6 max-w-4xl">
+
+  <!-- Client info -->
+  <div class="col-span-2 space-y-5">
+    <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+      <h3 class="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-widest">Informations client</h3>
+      <div class="grid grid-cols-2 gap-4">
+        {% set fields = [
+          ('Prénom', resa.prenom), ('Nom', resa.nom),
+          ('Email', resa.email), ('Téléphone', resa.telephone or '—'),
+          ('Prestation', resa.type_prest), ('Lieu', resa.lieu or '—'),
+          ('Date événement', resa.date_event.strftime('%d/%m/%Y') if resa.date_event else '—'),
+          ('Reçue le', resa.created_at.strftime('%d/%m/%Y à %H:%M')),
+        ] %}
+        {% for label, value in fields %}
+        <div>
+          <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">{{ label }}</div>
+          <div class="text-sm text-white">{{ value }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if resa.message %}
+      <div class="mt-4 pt-4 border-t border-white/5">
+        <div class="text-xs text-gray-500 uppercase tracking-widest mb-2">Message</div>
+        <p class="text-sm text-gray-300 leading-relaxed">{{ resa.message }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="space-y-4">
+    <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+      <h3 class="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-widest">Gestion</h3>
+
+      <form method="POST" action="{{ url_for('admin.reservation_update', resa_id=resa.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="mb-4">
+          <label class="block text-xs text-gray-500 mb-2">Statut</label>
+          {% set status_labels = {'nouveau':'Nouveau','en_attente':'En attente','confirme':'Confirmé','annule':'Annulé'} %}
+          <select name="status"
+            class="w-full bg-gray-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#78b9d7] transition">
+            {% for s in statuses %}
+            <option value="{{ s }}" {% if resa.status == s %}selected{% endif %}>{{ status_labels.get(s,s) }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-xs text-gray-500 mb-2">Note interne</label>
+          <textarea name="note_admin" rows="4"
+            class="w-full bg-gray-800 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#78b9d7] transition resize-none"
+            placeholder="Note visible uniquement par vous…">{{ resa.note_admin or '' }}</textarea>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-semibold text-white grad hover:opacity-90 transition mb-2">
+          Sauvegarder
+        </button>
+      </form>
+
+      <form method="POST" action="{{ url_for('admin.reservation_delete', resa_id=resa.id) }}"
+            onsubmit="return confirm('Supprimer définitivement cette réservation ?')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="w-full py-2 rounded-xl text-sm text-red-400 border border-red-500/20 hover:bg-red-500/10 transition">
+          Supprimer
+        </button>
+      </form>
+    </div>
+
+    <a href="mailto:{{ resa.email }}"
+       class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm border border-white/10 text-gray-300 hover:border-white/25 hover:text-white transition">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      Envoyer un email
+    </a>
+  </div>
+</div>
+{% endblock %}

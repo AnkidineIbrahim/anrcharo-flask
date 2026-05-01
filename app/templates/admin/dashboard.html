@@ -1,0 +1,142 @@
+{% extends 'admin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+{% block page_sub %}Vue d'ensemble de votre activité{% endblock %}
+
+{% block content %}
+<!-- Stats cards -->
+<div class="grid grid-cols-4 gap-5 mb-8">
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Photos</span>
+      <div class="w-9 h-9 rounded-xl bg-[#78b9d7]/15 flex items-center justify-center">
+        <svg class="w-4 h-4 text-[#78b9d7]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+        </svg>
+      </div>
+    </div>
+    <div class="text-3xl font-light grad-text">{{ stats.photos }}</div>
+    <div class="text-xs text-gray-500 mt-1">dans le portfolio</div>
+  </div>
+
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Réservations</span>
+      <div class="w-9 h-9 rounded-xl bg-[#bdbbea]/15 flex items-center justify-center">
+        <svg class="w-4 h-4 text-[#bdbbea]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+        </svg>
+      </div>
+    </div>
+    <div class="text-3xl font-light grad-text">{{ stats.reservations }}</div>
+    <div class="text-xs text-gray-500 mt-1">au total</div>
+  </div>
+
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6 border-[#78b9d7]/30">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Nouvelles</span>
+      <div class="w-9 h-9 rounded-xl bg-[#78b9d7]/20 flex items-center justify-center">
+        <svg class="w-4 h-4 text-[#78b9d7]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+    </div>
+    <div class="text-3xl font-light text-[#78b9d7]">{{ stats.new_resa }}</div>
+    <div class="text-xs text-gray-500 mt-1">à traiter</div>
+  </div>
+
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Témoignages</span>
+      <div class="w-9 h-9 rounded-xl bg-[#bdbbea]/15 flex items-center justify-center">
+        <svg class="w-4 h-4 text-[#bdbbea]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+    </div>
+    <div class="text-3xl font-light grad-text">{{ stats.testimonials }}</div>
+    <div class="text-xs text-gray-500 mt-1">publiés</div>
+  </div>
+</div>
+
+<!-- Quick actions + Recent reservations -->
+<div class="grid grid-cols-3 gap-6">
+
+  <!-- Quick actions -->
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <h3 class="text-sm font-semibold mb-4 text-gray-300">Actions rapides</h3>
+    <div class="space-y-2">
+      <a href="{{ url_for('admin.photo_upload') }}"
+         class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition text-sm text-gray-300 hover:text-white">
+        <div class="w-8 h-8 rounded-lg grad flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+        Uploader des photos
+      </a>
+      <a href="{{ url_for('admin.reservations') }}"
+         class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition text-sm text-gray-300 hover:text-white">
+        <div class="w-8 h-8 rounded-lg bg-[#bdbbea]/20 flex items-center justify-center">
+          <svg class="w-4 h-4 text-[#bdbbea]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M8 6h13M8 12h13M8 18h13"/>
+          </svg>
+        </div>
+        Voir les réservations
+      </a>
+      <a href="{{ url_for('admin.testimonial_add') }}"
+         class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition text-sm text-gray-300 hover:text-white">
+        <div class="w-8 h-8 rounded-lg bg-[#78b9d7]/20 flex items-center justify-center">
+          <svg class="w-4 h-4 text-[#78b9d7]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        Ajouter un témoignage
+      </a>
+      <a href="{{ url_for('admin.settings') }}"
+         class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition text-sm text-gray-300 hover:text-white">
+        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83"/>
+          </svg>
+        </div>
+        Paramètres du site
+      </a>
+    </div>
+  </div>
+
+  <!-- Recent reservations -->
+  <div class="col-span-2 bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-semibold text-gray-300">Dernières réservations</h3>
+      <a href="{{ url_for('admin.reservations') }}" class="text-xs text-[#78b9d7] hover:underline">Voir tout</a>
+    </div>
+
+    {% if recent_resa %}
+    <div class="space-y-3">
+      {% for r in recent_resa %}
+      <a href="{{ url_for('admin.reservation_detail', resa_id=r.id) }}"
+         class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition">
+        <div class="w-9 h-9 rounded-full grad flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+          {{ r.prenom[0] }}{{ r.nom[0] }}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium truncate">{{ r.full_name }}</div>
+          <div class="text-xs text-gray-500">{{ r.type_prest }} {% if r.date_event %}· {{ r.date_event.strftime('%d/%m/%Y') }}{% endif %}</div>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded-full font-medium flex-shrink-0
+          {% if r.status == 'nouveau' %}bg-blue-500/20 text-blue-400
+          {% elif r.status == 'en_attente' %}bg-yellow-500/20 text-yellow-400
+          {% elif r.status == 'confirme' %}bg-green-500/20 text-green-400
+          {% else %}bg-red-500/20 text-red-400{% endif %}">
+          {{ r.status_label }}
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-8 text-gray-600 text-sm">Aucune réservation pour le moment.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ settings.get('site_title', 'Anrcharo Photographe') }} — Mariage, Portrait, Commercial, Paysage & Shooting aux Comores.">
+  <title>{{ settings.get('site_title', 'Anrcharo Photographe') }}</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icons/favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/favicon-180.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">
+      <img src="{{ url_for('static', filename='icons/logo.png') }}" alt="Logo" class="nav-logo-img">
+      <span>Anrcharo Photographe</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#a-propos">À propos</a></li>
+      <li><a href="#services-tarifs">Tarifs</a></li>
+      <li><a href="#temoignages-clients">Avis</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-btn">Réserver</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#a-propos">À propos</a>
+    <a href="#services-tarifs">Tarifs</a>
+    <a href="#temoignages-clients">Avis</a>
+    <a href="#contact">Réserver</a>
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="hero">
+    <div class="hero-mesh"></div>
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+
+    <div class="hero-visual">
+      {% if hero_photos %}
+        <img src="{{ hero_photos[0].image_url }}" alt="Hero" class="hero-visual-img">
+      {% else %}
+        <div class="hero-visual-inner">
+          <svg class="camera-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="4" y="18" width="56" height="38" rx="6"/>
+            <circle cx="32" cy="37" r="11"/><circle cx="32" cy="37" r="7"/>
+            <path d="M22 18l4-8h12l4 8"/><circle cx="50" cy="26" r="2.5"/>
+          </svg>
+        </div>
+      {% endif %}
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        <div>
+          <div class="hero-badge-text">Disponible</div>
+          <div class="hero-badge-sub">Pour vos projets 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-tag"><div class="hero-tag-dot"></div>Photographe Professionnel — Comores</div>
+      <h1 class="hero-h1">{{ settings.get('hero_title', "Capturer l'instant parfait")|safe }}</h1>
+      <p class="hero-sub">{{ settings.get('hero_subtitle', 'Mariage, portrait, commercial, paysage et shooting.') }}</p>
+      <div class="hero-actions">
+        <a href="#portfolio" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          Voir le portfolio
+        </a>
+        <a href="#contact" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          Prendre RDV
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll-wrap">
+      <div class="scroll-pill"><div class="scroll-dot"></div></div>
+      <span class="scroll-text">Défiler</span>
+    </div>
+  </section>
+
+  <!-- ===================== STATS ===================== -->
+  <div id="stats">
+    <div class="stats-inner">
+      <div class="stat-item reveal"><div class="stat-num" data-target="500" data-suffix="+">0+</div><div class="stat-label">Séances réalisées</div></div>
+      <div class="stat-item reveal"><div class="stat-num" data-target="150" data-suffix="+">0+</div><div class="stat-label">Mariages capturés</div></div>
+      <div class="stat-item reveal"><div class="stat-num" data-target="5" data-suffix="">0</div><div class="stat-label">Spécialités</div></div>
+      <div class="stat-item reveal"><div class="stat-num" data-target="100" data-suffix="%">0%</div><div class="stat-label">Clients satisfaits</div></div>
+    </div>
+  </div>
+
+  <!-- ===================== PORTFOLIO ===================== -->
+  <section id="portfolio">
+    <div class="portfolio-header">
+      <div>
+        <div class="section-label reveal">Galerie</div>
+        <h2 class="section-title reveal">Un regard unique<br>sur chaque moment</h2>
+      </div>
+      <div class="portfolio-filters reveal">
+        <button class="filter-btn active" data-filter="all">Tout</button>
+        {% for cat in portfolio_cats %}
+        <button class="filter-btn" data-filter="{{ cat }}">{{ cat|capitalize }}</button>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Portfolio grid filled dynamically via JS -->
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div class="portfolio-loading">Chargement des photos…</div>
+    </div>
+  </section>
+
+  <!-- ===================== À PROPOS ===================== -->
+  <section id="a-propos">
+    <div class="about-grid">
+      <div class="about-visual-wrap reveal-left">
+        <div class="about-accent"></div>
+        <div class="about-img">
+          <img src="{{ url_for('static', filename='images/portrait-anrcharo.jpg') }}"
+               alt="Anrcharo Photographe"
+               class="about-photo"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="about-img-inner">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="rgba(120,185,215,0.45)" stroke-width="1.5">
+              <rect x="4" y="14" width="56" height="38" rx="5"/>
+              <circle cx="32" cy="33" r="11"/><circle cx="32" cy="33" r="7"/>
+              <path d="M22 14l4-7h12l4 7"/><circle cx="50" cy="22" r="2.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="about-stat-card">
+          <div class="num">{{ settings.get('experience_years', '5+') }}</div>
+          <div class="lbl">ans d'expérience</div>
+        </div>
+      </div>
+      <div class="about-content reveal-right">
+        <div class="section-label">À propos</div>
+        <h2 class="section-title">L'art de raconter<br>votre <em class="grad-text" style="font-style:italic;">histoire</em></h2>
+        <p>{{ settings.get('about_text_1', '') }}</p>
+        <p>{{ settings.get('about_text_2', '') }}</p>
+        <div class="about-tags">
+          {% for cat in portfolio_cats %}<span class="about-tag">{{ cat|capitalize }}</span>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section id="services-tarifs">
+    <div class="services-intro">
+      <div class="section-label reveal">Tarifs</div>
+      <h2 class="section-title reveal">Des formules<br>pour chaque besoin</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <h3>Portrait</h3>
+        <div class="service-price">Sur devis</div>
+        <ul class="service-features">
+          <li><span class="feature-dot"></span>Séance studio ou extérieur</li>
+          <li><span class="feature-dot"></span>1–2 heures de prise de vue</li>
+          <li><span class="feature-dot"></span>20 photos retouchées</li>
+          <li><span class="feature-dot"></span>Galerie privée en ligne</li>
+          <li><span class="feature-dot"></span>Livraison sous 7 jours</li>
+        </ul>
+        <a href="#contact" class="service-cta service-cta-outlined">Réserver</a>
+      </div>
+      <div class="service-card featured reveal">
+        <div class="featured-badge">Populaire</div>
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3>Mariage</h3>
+        <div class="service-price">Sur devis</div>
+        <ul class="service-features">
+          <li><span class="feature-dot"></span>Couverture complète de la journée</li>
+          <li><span class="feature-dot"></span>Deux photographes</li>
+          <li><span class="feature-dot"></span>100+ photos retouchées</li>
+          <li><span class="feature-dot"></span>Album photo premium</li>
+          <li><span class="feature-dot"></span>Galerie privée en ligne</li>
+          <li><span class="feature-dot"></span>Livraison sous 4 semaines</li>
+        </ul>
+        <a href="#contact" class="service-cta service-cta-filled">Réserver</a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><circle cx="12" cy="14" r="2.5"/></svg></div>
+        <h3>Commercial & Shooting</h3>
+        <div class="service-price">Sur devis</div>
+        <ul class="service-features">
+          <li><span class="feature-dot"></span>Photographie de produits</li>
+          <li><span class="feature-dot"></span>Shooting mode & lifestyle</li>
+          <li><span class="feature-dot"></span>Photos corporate & team</li>
+          <li><span class="feature-dot"></span>Droits d'utilisation inclus</li>
+        </ul>
+        <a href="#contact" class="service-cta service-cta-outlined">Réserver</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TÉMOIGNAGES ===================== -->
+  <section id="temoignages-clients">
+    <div class="section-label reveal">Témoignages</div>
+    <h2 class="section-title reveal">Ce que disent<br>nos clients</h2>
+    <div class="testimonials-grid">
+      {% for t in testimonials %}
+      <div class="testimonial reveal">
+        <div class="quote-icon">"</div>
+        <div class="stars">{{ '★' * t.rating }}{{ '☆' * (5 - t.rating) }}</div>
+        <p>{{ t.content }}</p>
+        <div class="t-author">
+          <div class="t-avatar">{{ t.author_name[0] }}</div>
+          <div>
+            <div class="t-name">{{ t.author_name }}</div>
+            <div class="t-role">{{ t.author_role }}</div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="testimonial reveal">
+        <div class="quote-icon">"</div>
+        <div class="stars">★★★★★</div>
+        <p>Anrcharo a su capturer chaque émotion avec une sensibilité rare. Les photos sont absolument magnifiques.</p>
+        <div class="t-author"><div class="t-avatar">FM</div><div><div class="t-name">Fatima & Mohamed</div><div class="t-role">Mariage — Moroni</div></div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-label reveal">Contact</div>
+        <h2 class="section-title reveal">Parlons de<br>votre projet</h2>
+        <p class="reveal">Remplissez le formulaire et je vous répondrai dans les 24 heures.</p>
+        <div class="contact-items">
+          <div class="contact-item reveal">
+            <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div>
+            <div class="ci-text"><div class="ci-label">Téléphone</div><div class="ci-value"><a href="tel:{{ settings.get('phone','') }}">{{ settings.get('phone', '+269 435 51 49') }}</a></div></div>
+          </div>
+          <div class="contact-item reveal">
+            <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+            <div class="ci-text"><div class="ci-label">Facebook</div><div class="ci-value"><a href="{{ settings.get('facebook_url','#') }}" target="_blank" rel="noopener">Anrcharo photographe</a></div></div>
+          </div>
+          <div class="contact-item reveal">
+            <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div class="ci-text"><div class="ci-label">Localisation</div><div class="ci-value"><span>{{ settings.get('location', 'Comores — Disponible partout') }}</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap reveal">
+        <div id="formInner">
+          <h3 class="form-title">Formulaire de réservation</h3>
+          <form id="reservationForm">
+            <div class="form-row">
+              <div class="form-group"><label>Prénom *</label><input type="text" name="prenom" required placeholder="Votre prénom"></div>
+              <div class="form-group"><label>Nom *</label><input type="text" name="nom" required placeholder="Votre nom"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="votre@email.com"></div>
+              <div class="form-group"><label>Téléphone</label><input type="tel" name="telephone" placeholder="+269 …"></div>
+            </div>
+            <div class="form-group">
+              <label>Type de prestation *</label>
+              <select name="type" required>
+                <option value="" disabled selected>Choisir une prestation</option>
+                {% for cat in portfolio_cats %}<option value="{{ cat }}">{{ cat|capitalize }}</option>{% endfor %}
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Date souhaitée</label><input type="date" name="date"></div>
+              <div class="form-group"><label>Lieu</label><input type="text" name="lieu" placeholder="Ville ou lieu"></div>
+            </div>
+            <div class="form-group"><label>Détails du projet</label><textarea name="message" placeholder="Décrivez votre projet…"></textarea></div>
+            <button type="submit" class="form-submit" id="submitBtn">Envoyer ma demande</button>
+            <p class="form-note">Je vous réponds sous 24h · Aucun engagement</p>
+          </form>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <h3 class="grad-text">Merci !</h3>
+          <p>Votre demande a bien été envoyée. Je vous contacterai dans les 24 heures.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">
+          <img src="{{ url_for('static', filename='icons/logo.png') }}" alt="Logo" class="footer-logo-img">
+          <span>Anrcharo Photographe</span>
+        </div>
+        <div class="footer-logo-sub">Photographe Professionnel — Comores</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#a-propos">À propos</a></li>
+        <li><a href="#services-tarifs">Tarifs</a></li>
+        <li><a href="#temoignages-clients">Avis</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="footer-right">© 2025 Anrcharo Photographe<br>Tous droits réservés</div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

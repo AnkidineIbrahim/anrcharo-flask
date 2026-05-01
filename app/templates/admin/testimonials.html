@@ -1,0 +1,54 @@
+{% extends 'admin/base.html' %}
+{% block title %}Témoignages{% endblock %}
+{% block page_title %}Témoignages{% endblock %}
+
+{% block header_actions %}
+  <a href="{{ url_for('admin.testimonial_add') }}"
+     class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white grad hover:opacity-90 transition">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Ajouter
+  </a>
+{% endblock %}
+
+{% block content %}
+{% if testimonials %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {% for t in testimonials %}
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-5 {% if not t.is_visible %}opacity-50{% endif %}">
+    <div class="flex items-start justify-between mb-3">
+      <div class="text-[#f0a840] text-sm">{{ '★' * t.rating }}{{ '☆' * (5 - t.rating) }}</div>
+      <div class="flex gap-2">
+        <a href="{{ url_for('admin.testimonial_edit', t_id=t.id) }}"
+           class="text-xs text-gray-400 hover:text-white transition">Modifier</a>
+        <form method="POST" action="{{ url_for('admin.testimonial_delete', t_id=t.id) }}"
+              onsubmit="return confirm('Supprimer ?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="text-xs text-red-400 hover:text-red-300 transition">Supprimer</button>
+        </form>
+      </div>
+    </div>
+    <p class="text-sm text-gray-300 leading-relaxed mb-4 line-clamp-3">{{ t.content }}</p>
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full grad flex items-center justify-center text-white text-xs font-bold">
+        {{ t.author_name[0] }}
+      </div>
+      <div>
+        <div class="text-sm font-medium">{{ t.author_name }}</div>
+        <div class="text-xs text-gray-500">{{ t.author_role }}</div>
+      </div>
+    </div>
+    {% if not t.is_visible %}
+    <div class="mt-3 text-xs text-gray-500 border border-white/5 rounded px-2 py-1 text-center">Masqué</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-24 text-gray-600 text-sm">
+  Aucun témoignage.
+  <a href="{{ url_for('admin.testimonial_add') }}" class="text-[#78b9d7] hover:underline ml-1">Ajouter →</a>
+</div>
+{% endif %}
+{% endblock %}

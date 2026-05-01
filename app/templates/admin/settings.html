@@ -1,0 +1,35 @@
+{% extends 'admin/base.html' %}
+{% block title %}Paramètres{% endblock %}
+{% block page_title %}Paramètres du site{% endblock %}
+{% block page_sub %}Modifiez les textes et informations affichés sur le site public{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl">
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-8">
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="space-y-5">
+        {% for s in settings %}
+        <div>
+          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
+            {{ s.label or s.key }}
+          </label>
+          {% if s.value and s.value|length > 80 %}
+          <textarea name="{{ s.key }}" rows="3"
+            class="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#78b9d7] transition resize-none">{{ s.value }}</textarea>
+          {% else %}
+          <input type="text" name="{{ s.key }}" value="{{ s.value or '' }}"
+            class="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#78b9d7] transition">
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="mt-8">
+        <button type="submit" class="px-8 py-2.5 rounded-xl font-semibold text-sm text-white grad hover:opacity-90 transition">
+          Sauvegarder
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

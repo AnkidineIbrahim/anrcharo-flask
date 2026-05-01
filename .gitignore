@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+
+# Flask
+instance/
+.webassets-cache
+app/static/images/*.jpg
+app/static/images/*.jpeg
+app/static/images/*.png
+app/static/images/*.webp
+
+# Environment
+.env
+*.env
+
+# DB locale
+*.db
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Migrations (optionnel - décommentez si vous gérez les migrations)
+# migrations/

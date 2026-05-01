@@ -1,0 +1,46 @@
+{% extends 'admin/base.html' %}
+{% block title %}Mon compte{% endblock %}
+{% block page_title %}Mon compte{% endblock %}
+
+{% block content %}
+<div class="max-w-lg space-y-6">
+
+  <!-- Change password -->
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <h3 class="text-sm font-semibold mb-5">Changer le mot de passe</h3>
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="change_password">
+      {% for label, fname, ph in [('Mot de passe actuel','current_password','••••••••'),('Nouveau mot de passe','new_password','Min. 8 caractères'),('Confirmer','confirm_password','Répétez le nouveau')] %}
+      <div class="mb-4">
+        <label class="block text-xs text-gray-500 uppercase tracking-widest mb-2">{{ label }}</label>
+        <input type="password" name="{{ fname }}" required
+          placeholder="{{ ph }}"
+          class="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#78b9d7] transition">
+      </div>
+      {% endfor %}
+      <button type="submit" class="px-6 py-2.5 rounded-xl font-semibold text-sm text-white grad hover:opacity-90 transition">
+        Mettre à jour
+      </button>
+    </form>
+  </div>
+
+  <!-- Change email -->
+  <div class="bg-gray-900 border border-white/5 rounded-2xl p-6">
+    <h3 class="text-sm font-semibold mb-5">Email</h3>
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="change_email">
+      <div class="mb-4">
+        <label class="block text-xs text-gray-500 uppercase tracking-widest mb-2">Nouvel email</label>
+        <input type="email" name="new_email" value="{{ current_user.email }}" required
+          class="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#78b9d7] transition">
+      </div>
+      <button type="submit" class="px-6 py-2.5 rounded-xl font-semibold text-sm text-white grad hover:opacity-90 transition">
+        Mettre à jour
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

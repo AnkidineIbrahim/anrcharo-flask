@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Admin — Anrcharo</title>
+  <link rel="icon" href="{{ url_for('static', filename='icons/favicon-32.png') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .grad { background: linear-gradient(135deg, #78b9d7, #bdbbea); }
+    .grad-text { background: linear-gradient(135deg,#78b9d7,#bdbbea); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  </style>
+</head>
+<body class="bg-gray-950 min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <img src="{{ url_for('static', filename='icons/logo.png') }}" alt="Logo" class="w-20 h-20 object-contain mx-auto mb-4">
+      <h1 class="text-2xl font-semibold grad-text">Anrcharo Photographe</h1>
+      <p class="text-gray-500 text-sm mt-1">Espace Administrateur</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-gray-900 border border-white/8 rounded-2xl p-8">
+      <h2 class="text-lg font-semibold mb-6">Connexion</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+          <div class="mb-4 px-4 py-3 rounded-lg text-sm
+            {% if cat == 'danger' %}bg-red-500/15 text-red-400{% else %}bg-blue-500/15 text-blue-400{% endif %}">
+            {{ msg }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
+            Identifiant
+          </label>
+          <input type="text" name="username" required autofocus
+            class="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#78b9d7] focus:ring-2 focus:ring-[#78b9d7]/20 transition"
+            placeholder="Votre identifiant">
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
+            Mot de passe
+          </label>
+          <input type="password" name="password" required
+            class="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#78b9d7] focus:ring-2 focus:ring-[#78b9d7]/20 transition"
+            placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl font-semibold text-sm text-white grad hover:opacity-90 transition">
+          Se connecter
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-gray-600 mt-6">
+      <a href="{{ url_for('public.index') }}" class="hover:text-gray-400 transition">← Retour au site</a>
+    </p>
+  </div>
+</body>
+</html>
